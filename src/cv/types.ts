@@ -1,3 +1,5 @@
+import type { ComponentType } from 'react';
+
 export interface Profile {
   name: string;
   title: string;
@@ -61,4 +63,10 @@ export interface CvData {
   projects: ProjectEntry[];
   leftSectionOrder: Array<'skills' | 'languages'>;
   rightSectionOrder: Array<'experience' | 'education' | 'projects'>;
+}
+
+export interface CvTemplate {
+  id: string;
+  label: string;
+  component: ComponentType<{ cv: CvData }>;
 }
