@@ -6,7 +6,7 @@ import sys
 from application.editor_controller import EditorController
 from core.io.json import load_document
 from core.models import Document, Node
-from presentation.main_window import EditorMainWindow
+from presentation.qt.main_window import QApplication, QtEditorMainWindow
 
 
 def _build_default_document() -> Document:
@@ -33,11 +33,10 @@ def main(argv: list[str] | None = None) -> int:
 
     document = _load_or_create_document(startup_args)
     controller = EditorController(document=document)
-    ui_shell = EditorMainWindow(controller=controller)
-
-    # Startup wiring for framework adapters (Qt window integration) stays localized here.
-    _ = ui_shell
-    return 0
+    app = QApplication(sys.argv)
+    window = QtEditorMainWindow(controller=controller)
+    window.show()
+    return app.exec()
 
 
 if __name__ == "__main__":
