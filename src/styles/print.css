@@ -1,0 +1,89 @@
+:root {
+  --cv-page-width: 210mm;
+  --cv-page-height: 297mm;
+
+  --cv-shell-padding-x: 14mm;
+  --cv-shell-padding-top: 14mm;
+  --cv-shell-padding-bottom: 10mm;
+  --cv-summary-padding-y: 8mm;
+  --cv-column-padding: 10mm;
+
+  --cv-left-column-width: 68mm;
+  --cv-summary-max-width: 85%;
+
+  --cv-section-gap-lg: 9mm;
+  --cv-section-gap-md: 7mm;
+  --cv-section-gap-sm: 5.5mm;
+  --cv-item-gap-md: 4.5mm;
+  --cv-item-gap-sm: 3mm;
+  --cv-rule-width: 16mm;
+
+  --cv-font-size-h1: 30pt;
+  --cv-line-height-h1: 1.08;
+  --cv-font-size-section-title: 7pt;
+  --cv-line-height-section-title: 1.4;
+  --cv-font-size-body: 9pt;
+  --cv-line-height-body: 1.6;
+  --cv-font-size-meta: 7.5pt;
+  --cv-line-height-meta: 1.45;
+}
+
+.cv-page {
+  width: var(--cv-page-width);
+  min-height: var(--cv-page-height);
+  margin: 12mm auto;
+  background: var(--cv-color-bg-page);
+}
+
+.cv-sheet {
+  width: var(--cv-page-width);
+  min-height: var(--cv-page-height);
+  margin: 0;
+}
+
+.cv-print-sheet {
+  box-shadow: 0 10px 20px rgba(17, 24, 39, 0.18);
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  :root {
+    --cv-shell-padding-x: 14mm;
+    --cv-shell-padding-top: 14mm;
+    --cv-shell-padding-bottom: 10mm;
+    --cv-summary-padding-y: 8mm;
+    --cv-column-padding: 10mm;
+    --cv-left-column-width: 68mm;
+    --cv-section-gap-lg: 8mm;
+    --cv-section-gap-md: 6mm;
+    --cv-section-gap-sm: 5mm;
+    --cv-item-gap-md: 4mm;
+    --cv-item-gap-sm: 2.5mm;
+    --cv-font-size-h1: 28pt;
+    --cv-font-size-body: 8.8pt;
+    --cv-font-size-meta: 7.2pt;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    width: var(--cv-page-width);
+    min-height: var(--cv-page-height);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .cv-page {
+    margin: 0;
+  }
+
+  .cv-sheet,
+  .cv-print-sheet {
+    box-shadow: none;
+  }
+}
