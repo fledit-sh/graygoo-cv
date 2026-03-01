@@ -61,6 +61,7 @@ class DesignRegistry:
     default_plugin_id: str = "default"
     _plugins_by_id: dict[str, DesignPlugin] = field(default_factory=dict, init=False)
     _plugins_by_compat_id: dict[str, DesignPlugin] = field(default_factory=dict, init=False)
+    _active_plugin_id: str = field(default="", init=False)
 
     def load_plugins(self) -> None:
         """Import plugins from immediate subpackages in designs/."""
@@ -117,6 +118,24 @@ class DesignRegistry:
             return self.default_plugin
 
         return plugin
+
+    def activate(self, design_id: str | None) -> DesignPlugin:
+        """Resolve and store the active plugin for UI shells."""
+
+        plugin = self.get(design_id)
+        self._active_plugin_id = plugin.plugin_id
+        return plugin
+
+    @property
+    def active_plugin(self) -> DesignPlugin:
+        if self._active_plugin_id:
+            return self.get(self._active_plugin_id)
+        return self.default_plugin
+
+    def available_design_ids(self) -> tuple[str, ...]:
+        if not self._plugins_by_id:
+            self.load_plugins()
+        return tuple(sorted(self._plugins_by_id.keys()))
 
     @property
     def default_plugin(self) -> DesignPlugin:

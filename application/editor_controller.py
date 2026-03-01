@@ -103,7 +103,7 @@ class EditorController:
         return self.command_bus.redo()
 
     def set_active_design(self, design_id: str | None) -> None:
-        resolved_plugin = self.design_registry.get(design_id)
+        resolved_plugin = self.design_registry.activate(design_id)
         self.active_design_id = resolved_plugin.plugin_id
 
     def get_render_state(self) -> dict[str, dict[str, Any]]:
