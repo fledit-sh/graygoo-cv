@@ -6,6 +6,8 @@ from typing import Any
 from application.commands import DeleteNode, InsertNode, UpdateNodeProps
 from application.commands.base import Command
 from core.models import Document, Node
+from designs.base import DesignRegistry
+from designs.runtime.token_resolver import build_render_state
 
 
 @dataclass(slots=True)
@@ -68,6 +70,8 @@ class EditorController:
 
     document: Document
     command_bus: CommandBus = field(default_factory=CommandBus)
+    design_registry: DesignRegistry = field(default_factory=DesignRegistry)
+    active_design_id: str = "default"
 
     def insert_node(self, parent_id: str, node: Node, index: int | None = None) -> None:
         self.command_bus.dispatch(
@@ -97,6 +101,14 @@ class EditorController:
 
     def redo(self) -> bool:
         return self.command_bus.redo()
+
+    def set_active_design(self, design_id: str | None) -> None:
+        resolved_plugin = self.design_registry.get(design_id)
+        self.active_design_id = resolved_plugin.plugin_id
+
+    def get_render_state(self) -> dict[str, dict[str, Any]]:
+        plugin = self.design_registry.get(self.active_design_id)
+        return build_render_state(plugin.token_set, self.document.root)
 
     def export_document_payload(self) -> dict[str, Any]:
         """Payload-only serialization for document storage."""
