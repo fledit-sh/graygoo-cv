@@ -1,0 +1,9 @@
+{
+  "plugin_id": "high-contrast",
+  "name": "High Contrast",
+  "description": "Accessibility-focused design with stronger contrast and spacing.",
+  "version": "1.0.0",
+  "design_api_version": "1",
+  "required_editor_version": "1.0.0",
+  "preview": "preview/high-contrast.png"
+}

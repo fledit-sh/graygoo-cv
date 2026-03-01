@@ -5,7 +5,9 @@ from pathlib import Path
 from typing import Any
 
 from application.editor_controller import EditorController
+from application.settings import load_app_settings
 from core.models import Document
+from designs.base import DesignRegistry
 
 
 def dump_document_payload(controller: EditorController, path: str | Path) -> None:
@@ -29,11 +31,19 @@ def dump_history_metadata(controller: EditorController, path: str | Path) -> Non
 def load_controller(
     document_path: str | Path,
     history_path: str | Path | None = None,
+    settings_path: str | Path | None = None,
 ) -> EditorController:
-    """Restore controller from separated document/history storage."""
+    """Restore controller from separated document/history/settings storage."""
 
     document_data: dict[str, Any] = json.loads(Path(document_path).read_text(encoding="utf-8"))
-    controller = EditorController(document=Document.from_dict(document_data))
+    settings = load_app_settings(settings_path)
+    design_registry = DesignRegistry(
+        external_design_package_paths=settings.external_design_package_paths,
+    )
+    controller = EditorController(
+        document=Document.from_dict(document_data),
+        design_registry=design_registry,
+    )
 
     if history_path and Path(history_path).exists():
         history_data = json.loads(Path(history_path).read_text(encoding="utf-8"))
