@@ -14,7 +14,8 @@ class DesignRegistryTests(unittest.TestCase):
         self.assertEqual(plugin.plugin_id, "default")
         self.assertEqual(plugin.version, "1.0.0")
         self.assertIn("json", plugin.renderer_mappings)
-        self.assertIn("color.text.primary", plugin.token_set)
+        self.assertIn("text", plugin.token_set)
+        self.assertIn("heading", plugin.token_set["text"])
 
     def test_unknown_plugin_falls_back_to_default(self) -> None:
         registry = DesignRegistry(default_plugin_id="default")

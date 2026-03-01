@@ -29,10 +29,25 @@ class DefaultDesignPlugin(DesignPlugin):
     @property
     def token_set(self) -> dict[str, Any]:
         return {
-            "color.text.primary": "#111111",
-            "color.text.muted": "#555555",
-            "space.section": "1.5rem",
-            "typography.heading": "Inter",
+            "text": {
+                "heading": {
+                    "primary": {"font_family": "Inter", "font_size": "1.5rem", "color": "#111111"},
+                    "secondary": {"font_family": "Inter", "font_size": "1.25rem", "color": "#222222"},
+                },
+                "body": {
+                    "primary": {"font_family": "Inter", "font_size": "1rem", "color": "#222222"},
+                    "muted": {"font_family": "Inter", "font_size": "1rem", "color": "#555555"},
+                },
+            },
+            "surface": {
+                "panel": "#f5f5f5",
+                "background": "#ffffff",
+            },
+            "spacing": {
+                "sm": "0.5rem",
+                "md": "1rem",
+                "section": "1.5rem",
+            },
         }
 
     @property

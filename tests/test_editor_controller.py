@@ -7,19 +7,38 @@ from pathlib import Path
 
 from application.editor_controller import EditorController
 from application.session import dump_document_payload, dump_history_metadata, load_controller
-from core.models import Document, Node
+from core.models import Document, Node, StyleTokenRef
 
 
 class EditorControllerTests(unittest.TestCase):
     def _make_controller(self) -> EditorController:
-        root = Node(id="root", kind="document", children=[Node(id="n1", kind="paragraph", text="A")])
+        root = Node(
+            id="root",
+            kind="document",
+            children=[
+                Node(
+                    id="n1",
+                    kind="paragraph",
+                    text="A",
+                    style_tokens=[StyleTokenRef(token="text.body.primary")],
+                )
+            ],
+        )
         doc = Document(id="doc-1", title="Test", root=root)
         return EditorController(document=doc)
 
     def test_insert_delete_update_with_undo_redo(self) -> None:
         controller = self._make_controller()
 
-        controller.insert_node("root", Node(id="n2", kind="paragraph", text="B"))
+        controller.insert_node(
+            "root",
+            Node(
+                id="n2",
+                kind="paragraph",
+                text="B",
+                style_tokens=[StyleTokenRef(token="text.body.muted")],
+            ),
+        )
         self.assertEqual([n.id for n in controller.document.root.children], ["n1", "n2"])
 
         controller.update_node_props("n2", {"text": "B2", "emphasis": True})
@@ -42,7 +61,15 @@ class EditorControllerTests(unittest.TestCase):
 
     def test_persist_document_and_history_separately(self) -> None:
         controller = self._make_controller()
-        controller.on_add_node("root", Node(id="n2", kind="paragraph", text="B"))
+        controller.on_add_node(
+            "root",
+            Node(
+                id="n2",
+                kind="paragraph",
+                text="B",
+                style_tokens=[StyleTokenRef(token="spacing.sm")],
+            ),
+        )
         controller.on_edit_node("n2", text="edited")
 
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -62,6 +89,17 @@ class EditorControllerTests(unittest.TestCase):
             restored = load_controller(document_path=document_path, history_path=history_path)
             self.assertEqual(restored.document.root.children[1].text, "edited")
             self.assertEqual(len(restored.export_history_metadata()), len(stored_history))
+
+    def test_design_switch_recomputes_render_state_without_mutating_document(self) -> None:
+        controller = self._make_controller()
+        before_payload = controller.export_document_payload()
+
+        default_state = controller.get_render_state()
+        controller.set_active_design("high-contrast")
+        high_contrast_state = controller.get_render_state()
+
+        self.assertEqual(before_payload, controller.export_document_payload())
+        self.assertNotEqual(default_state["n1"], high_contrast_state["n1"])
 
 
 if __name__ == "__main__":

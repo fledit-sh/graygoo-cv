@@ -12,6 +12,12 @@ class StyleTokenRef:
     variant: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
+    def __post_init__(self) -> None:
+        if _looks_like_concrete_style_value(self.token):
+            raise ValueError(
+                "StyleTokenRef.token must be a token key, not a concrete style value"
+            )
+
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "StyleTokenRef":
         return cls(
@@ -26,6 +32,15 @@ class StyleTokenRef:
             "variant": self.variant,
             "metadata": self.metadata,
         }
+
+
+def _looks_like_concrete_style_value(value: str) -> bool:
+    normalized = value.strip().lower()
+    if normalized.startswith("#"):
+        return True
+    if normalized.endswith(("px", "rem", "em", "%", "pt")):
+        return True
+    return False
 
 
 @dataclass(slots=True)
