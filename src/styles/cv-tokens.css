@@ -1,6 +1,6 @@
 :root {
   --cv-page-width: 210mm;
-  --cv-page-min-height: 297mm;
+  --cv-page-height: 297mm;
 
   --cv-shell-padding-x: 3.5rem;
   --cv-shell-padding-top: 3.5rem;
@@ -56,16 +56,11 @@
 }
 
 .cv-page {
-  min-height: 100vh;
   background: var(--cv-color-bg-page);
   font-family: Inter, sans-serif;
 }
 
 .cv-sheet {
-  width: 100%;
-  max-width: var(--cv-page-width);
-  min-height: var(--cv-page-min-height);
-  margin: 0 auto;
   background: var(--cv-color-bg-page);
 }
 
@@ -156,12 +151,3 @@
   color: var(--cv-color-text-subtle);
 }
 
-.cv-print-sheet {
-  box-shadow: 0 10px 15px rgba(17, 24, 39, 0.15);
-}
-
-@media print {
-  .cv-print-sheet {
-    box-shadow: none;
-  }
-}

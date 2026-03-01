@@ -212,18 +212,6 @@ export default function App() {
         </div>
       </div>
 
-      <style>{`
-        @media print {
-          body {
-            margin: 0;
-            padding: 0;
-          }
-          @page {
-            size: A4;
-            margin: 0;
-          }
-        }
-      `}</style>
     </div>
   );
 }
