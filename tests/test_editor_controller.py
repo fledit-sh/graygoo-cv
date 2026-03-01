@@ -90,6 +90,85 @@ class EditorControllerTests(unittest.TestCase):
             self.assertEqual(restored.document.root.children[1].text, "edited")
             self.assertEqual(len(restored.export_history_metadata()), len(stored_history))
 
+
+    def test_load_controller_uses_external_design_paths_from_settings(self) -> None:
+        controller = self._make_controller()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_root = Path(temp_dir)
+            document_path = temp_root / "document.json"
+            settings_path = temp_root / "settings.json"
+            external_design_dir = temp_root / "external_design"
+            external_design_dir.mkdir(parents=True)
+
+            (external_design_dir / "__init__.py").write_text(
+                "\n".join(
+                    [
+                        "from dataclasses import dataclass",
+                        "from designs.base import DesignPlugin",
+                        "from designs.default import JsonRendererFactory",
+                        "",
+                        "@dataclass(slots=True)",
+                        "class ExternalPlugin(DesignPlugin):",
+                        "    @property",
+                        "    def plugin_id(self) -> str:",
+                        "        return 'settings-external'",
+                        "",
+                        "    @property",
+                        "    def version(self) -> str:",
+                        "        return '1.0.0'",
+                        "",
+                        "    @property",
+                        "    def design_api_version(self) -> str:",
+                        "        return '1'",
+                        "",
+                        "    @property",
+                        "    def token_set(self):",
+                        "        return {",
+                        "            'text': {",
+                        "                'heading': {'primary': {}, 'secondary': {}},",
+                        "                'body': {'primary': {}, 'muted': {}}",
+                        "            },",
+                        "            'surface': {'panel': '#fff', 'background': '#fff'},",
+                        "            'spacing': {'sm': '1', 'md': '1', 'section': '1'}",
+                        "        }",
+                        "",
+                        "    @property",
+                        "    def renderer_mappings(self):",
+                        "        return {",
+                        "            'json': JsonRendererFactory(renderer_name='settings-json'),",
+                        "            'html': JsonRendererFactory(renderer_name='settings-html'),",
+                        "        }",
+                        "",
+                        "PLUGIN = ExternalPlugin()",
+                    ]
+                ) + "\n",
+                encoding="utf-8",
+            )
+            (external_design_dir / "design.json").write_text(
+                json.dumps(
+                    {
+                        "plugin_id": "settings-external",
+                        "version": "1.0.0",
+                        "design_api_version": "1",
+                        "required_editor_version": "1.0.0",
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            dump_document_payload(controller, document_path)
+            settings_path.write_text(
+                json.dumps({"external_design_package_paths": [str(external_design_dir)]}),
+                encoding="utf-8",
+            )
+
+            restored = load_controller(document_path=document_path, settings_path=settings_path)
+            plugin = restored.design_registry.get("settings-external")
+            self.assertEqual(plugin.plugin_id, "settings-external")
+
     def test_design_switch_recomputes_render_state_without_mutating_document(self) -> None:
         controller = self._make_controller()
         before_payload = controller.export_document_payload()

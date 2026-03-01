@@ -1,0 +1,9 @@
+{
+  "plugin_id": "default",
+  "name": "Default",
+  "description": "Balanced baseline design for general editing and export.",
+  "version": "1.0.0",
+  "design_api_version": "1",
+  "required_editor_version": "1.0.0",
+  "preview": "preview/default.png"
+}

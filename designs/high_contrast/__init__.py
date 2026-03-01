@@ -18,6 +18,10 @@ class HighContrastDesignPlugin(DesignPlugin):
         return "1.0.0"
 
     @property
+    def design_api_version(self) -> str:
+        return "1"
+
+    @property
     def token_set(self) -> dict[str, Any]:
         return {
             "text": {
