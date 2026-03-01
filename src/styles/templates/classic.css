@@ -1,0 +1,83 @@
+.classic-template {
+  font-family: Inter, sans-serif;
+  background: var(--cv-color-bg-page);
+}
+
+.classic-template .cv-header {
+  border-bottom: 2px solid var(--cv-color-line-strong);
+  padding: var(--cv-shell-padding-top) var(--cv-shell-padding-x) var(--cv-shell-padding-bottom);
+}
+
+.classic-template .cv-name {
+  margin-bottom: 0.75rem;
+  font-size: var(--cv-font-size-h1);
+  line-height: var(--cv-line-height-h1);
+  font-weight: 700;
+  letter-spacing: var(--cv-letter-spacing-title);
+  color: var(--cv-color-text-primary);
+}
+
+.classic-template .cv-role {
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  color: var(--cv-color-text-secondary);
+  font-weight: 300;
+}
+
+.classic-template .cv-contact {
+  font-size: 0.875rem;
+  color: var(--cv-color-text-secondary);
+}
+
+.classic-template .cv-summary {
+  border-bottom: 1px solid var(--cv-color-line-soft);
+  padding: var(--cv-summary-padding-y) var(--cv-shell-padding-x);
+}
+
+.classic-template .cv-grid {
+  display: grid;
+  grid-template-columns: var(--cv-left-column-width) 1fr;
+}
+
+.classic-template .cv-sidebar {
+  background: var(--cv-color-bg-sidebar);
+  border-right: 1px solid var(--cv-color-line-soft);
+  padding: var(--cv-column-padding);
+}
+
+.classic-template .cv-main {
+  padding: var(--cv-column-padding);
+}
+
+.classic-template .cv-section-title {
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: var(--cv-letter-spacing-section);
+  font-size: var(--cv-font-size-section-title);
+  line-height: var(--cv-line-height-section-title);
+  font-weight: 600;
+  color: var(--cv-color-text-primary);
+}
+
+.classic-template .cv-rule {
+  width: var(--cv-rule-width);
+  height: 1px;
+  background: var(--cv-color-line-strong);
+}
+
+.classic-template .cv-body {
+  font-size: var(--cv-font-size-body);
+  line-height: var(--cv-line-height-body);
+  color: var(--cv-color-text-secondary);
+}
+
+.classic-template .cv-meta {
+  font-size: var(--cv-font-size-meta);
+  line-height: var(--cv-line-height-meta);
+  color: var(--cv-color-text-muted);
+  font-weight: 300;
+}
+
+.classic-template .cv-text-primary {
+  color: var(--cv-color-text-primary);
+}

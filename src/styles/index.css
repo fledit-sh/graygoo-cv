@@ -3,4 +3,6 @@
 @import './theme.css';
 
 @import './cv-tokens.css';
+@import './templates/classic.css';
+@import './templates/compact.css';
 @import './print.css';
